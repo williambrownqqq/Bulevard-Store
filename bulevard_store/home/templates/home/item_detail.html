@@ -1,0 +1,29 @@
+{% extends "base_menu.html" %}
+
+{% block content %}
+    <br>
+    <a onclick="addToCart('{% url 'home:add_to_cart' item.id %}', {{ item.id }} );return false;"> add to cart </a>
+    <br>
+    Name: {{ item.title }}<br>
+    prise: {{ item.price }}<br>
+    discount: {{ item.discount_price }}<br>
+    <a href="{% url 'home:item_list'  item.category.id %}">category: {{ item.category }}</a> <br>
+    count: {{ item.count }} <br>
+    description: {{ item.description }} <br>
+    {% if item.get_images %}
+    {% for image in item.get_images %}
+        <img src="{{image.image.url}}">
+    {% endfor %}
+    {% endif %}
+
+<script>
+function addToCart(url, item_id) {
+    console.log('Requesting JSON');
+    $.post(url, {},  function(rowz){
+        console.log(url, 'finished');
+    }).fail(function(xhr) {
+        alert('Url failed with '+xhr.status+' '+url);
+    });
+}
+</script>
+{% endblock %}

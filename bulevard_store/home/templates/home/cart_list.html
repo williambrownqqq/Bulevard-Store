@@ -1,0 +1,63 @@
+{% extends "base_menu.html" %}
+
+{% block content %}
+    <h1>Cart</h1>
+    {% if cart_list %}
+        <ul>
+        {% for cart_item in cart_list %}
+            <li id="li_{{ cart_item.id }}">
+                <div id="item_count_{{ cart_item.id }}" style="display:none">{{ cart_item.item.count }}</div>
+                <a href="{% url 'home:item_detail'  cart_item.item.id %}">Name: {{ cart_item.item.title }}</a><br>
+                prise: {{ cart_item.item.price }}<br>
+                discount: {{ cart_item.item.discount_price }}<br>
+                category: {{ cart_item.item.category }} <br>
+                count: <span id="count_{{ cart_item.id }}">{{ cart_item.count }}</span>
+                <a onclick="incDecItem('{% url 'home:inc_item' cart_item.id %}', {{ cart_item.id }});return false;"> + </a>
+                <a onclick="incDecItem('{% url 'home:dec_item' cart_item.id %}', {{ cart_item.id }}, true );return false;"> - </a>
+                <br>
+                <a onclick="removeFromCart('{% url 'home:remove_from_cart' cart_item.id %}', {{ cart_item.id }} );return false;"> remove </a>
+                <br>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no items in the library</p>
+    {% endif %}
+<script>
+function incDecItem(url, item_id, is_dec = false) {
+    console.log('Requesting JSON' + is_dec);
+    $.post(url, {},  function(rowz){
+        console.log(url, 'finished');
+        count = parseInt($("#count_"+item_id).text())
+        console.log(count);
+        item_count = parseInt($("#item_count_"+item_id).text())
+        console.log(item_count);
+        if (is_dec){
+            if (count > 1){
+                $("#count_" + item_id).text(count-1)
+                $("#item_count_" + item_id).text(item_count+1)
+            }
+        }else{
+            if (item_count > 0){
+                $("#count_" + item_id).text(count+1)
+                $("#item_count_" + item_id).text(item_count-1)
+            }
+        }
+    }).fail(function(xhr) {
+        alert('Url failed with '+xhr.status+' '+url);
+    });
+}
+function removeFromCart(url, item_id) {
+    console.log('Requesting JSON');
+    $.post(url, {},  function(rowz){
+        console.log(url, 'finished');
+        console.log(item_id);
+        $('#li_' + item_id).remove();
+    }).fail(function(xhr) {
+        alert('Url failed with '+xhr.status+' '+url);
+    });
+}
+</script>
+
+
+{% endblock %}

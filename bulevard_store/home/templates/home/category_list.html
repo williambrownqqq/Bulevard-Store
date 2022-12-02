@@ -1,0 +1,22 @@
+{% extends "base_menu.html" %}
+
+{% block content %}
+    <h1>Category List</h1>
+    {% if category_list %}
+        <ul>
+        {% for category in category_list %}
+            <li>
+                <a href="{% url 'home:item_list' category.id %}">title: {{ category.title }}</a><br>
+                {% if category.image %}
+                    <img style="width: 100px;" src="{{category.image.url}}">
+<!--                {% for image in item.get_images %}-->
+<!--                    <img src="{{image.image.url}}">-->
+<!--                {% endfor %}-->
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no items in the library</p>
+    {% endif %}
+{% endblock %}

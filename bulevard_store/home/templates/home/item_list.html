@@ -1,0 +1,28 @@
+{% extends "base_menu.html" %}
+
+{% block content %}
+    <h1>Item List</h1>
+    {% load static %}
+    {% if item_list %}
+        <ul>
+        {% for item in item_list %}
+            <li>
+                <a href="{% url 'home:item_detail'  item.id %}">Name: {{ item.title }}</a><br>
+                prise: {{ item.price }}<br>
+                discount: {{ item.discount_price }}<br>
+                category: {{ item.category }} <br>
+                count: {{ item.count }} <br>
+                description: {{ item.description }} <br>
+                {% if item.get_images %}
+                    <img style="width: 100px;" src="{{item.get_images.0.image.url}}">
+<!--                {% for image in item.get_images %}-->
+<!--                    <img src="{{image.image.url}}">-->
+<!--                {% endfor %}-->
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no items in the library</p>
+    {% endif %}
+{% endblock %}

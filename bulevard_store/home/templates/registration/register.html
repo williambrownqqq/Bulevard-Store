@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+<h1>Register</h1>
+<form method="POST" action="{% url 'home:registration'%}">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" class="btn btn-primary" value="Register" />
+	<input type="hidden" name="next" value="{{ next }}" />
+<!--	<button class="btn btn-primary" type="submit">Register</button>-->
+</form>
+<p class="text-center">If you already have an account, <a href="{% url 'login' %}?next={{ next }}">login</a> instead.</p>
+
+{% endblock %}
